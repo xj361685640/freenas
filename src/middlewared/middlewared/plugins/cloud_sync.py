@@ -1,9 +1,10 @@
 from middlewared.rclone.base import BaseRcloneRemote
-from middlewared.schema import accepts, Bool, Cron, Dict, Error, Int, Patch, Str
+from middlewared.schema import accepts, Bool, Cron, Dict, Int, Patch, Str
 from middlewared.service import (
     CallError, CRUDService, ValidationErrors, item_method, job, private
 )
 from middlewared.utils import load_modules, load_classes, Popen, run
+from middlewared.validators import validate_attributes
 
 import asyncio
 import base64
@@ -138,24 +139,6 @@ def rclone_encrypt_password(password):
     return base64.urlsafe_b64encode(encrypted).decode("ascii").rstrip("=")
 
 
-def validate_attributes(schema, data, additional_attrs=False):
-    verrors = ValidationErrors()
-
-    schema = Dict("attributes", *schema, additional_attrs=additional_attrs)
-
-    try:
-        data["attributes"] = schema.clean(data["attributes"])
-    except Error as e:
-        verrors.add(e.attribute, e.errmsg, e.errno)
-
-    try:
-        schema.validate(data["attributes"])
-    except ValidationErrors as e:
-        verrors.extend(e)
-
-    return verrors
-
-
 class CredentialsService(CRUDService):
 
     class Config:
@@ -218,7 +201,7 @@ class CredentialsService(CRUDService):
     def _validate(self, schema_name, data):
         verrors = ValidationErrors()
 
-        if data["provider"] not in REMOTES:
+        if data.get("provider") not in REMOTES:
             verrors.add(f"{schema_name}.provider", "Invalid provider")
         else:
             provider = REMOTES[data["provider"]]
