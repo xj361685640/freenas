@@ -114,7 +114,6 @@ class Port:
         range_validator(value)
 
 
-# Should this method be moved here ?
 def validate_attributes(schema, data, additional_attrs=False, attr_key="attributes"):
     from middlewared.schema import Dict, Error
     from middlewared.service import ValidationErrors
