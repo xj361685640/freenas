@@ -201,7 +201,7 @@ class CredentialsService(CRUDService):
     def _validate(self, schema_name, data):
         verrors = ValidationErrors()
 
-        if data.get("provider") not in REMOTES:
+        if data["provider"] not in REMOTES:
             verrors.add(f"{schema_name}.provider", "Invalid provider")
         else:
             provider = REMOTES[data["provider"]]
