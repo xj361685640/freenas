@@ -2644,7 +2644,7 @@ require([
 
     };
 
-    createCertificateDialog = function(btn_id, name, url) {
+    submitCertificateForm = function(btn_id) {
         dom.byId(btn_id).click();
     };
 
