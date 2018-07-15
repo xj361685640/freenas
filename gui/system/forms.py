@@ -2756,7 +2756,6 @@ class CertificateEditForm(MiddlewareModelForm, ModelForm):
     middleware_attr_prefix = 'cert_'
     middleware_attr_schema = 'certificate'
     is_singletone = False
-    complete_job = False
     middleware_job = True
 
     cert_name = forms.CharField(
@@ -2772,6 +2771,7 @@ class CertificateEditForm(MiddlewareModelForm, ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
+        self.complete_job = kwargs.pop('complete_job', False)
         super(CertificateEditForm, self).__init__(*args, **kwargs)
 
         self.fields['cert_certificate'].widget.attrs['readonly'] = True
@@ -2795,7 +2795,6 @@ class CertificateCSREditForm(MiddlewareModelForm, ModelForm):
     middleware_attr_prefix = 'cert_'
     middleware_attr_schema = 'certificate'
     is_singletone = False
-    complete_job = False
     middleware_job = True
 
     cert_name = forms.CharField(
@@ -2811,6 +2810,7 @@ class CertificateCSREditForm(MiddlewareModelForm, ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
+        self.complete_job = kwargs.pop('complete_job', False)
         super(CertificateCSREditForm, self).__init__(*args, **kwargs)
 
         self.fields['cert_name'].widget.attrs['readonly'] = False
@@ -2834,7 +2834,6 @@ class CertificateCSRImportForm(MiddlewareModelForm, ModelForm):
     middleware_attr_prefix = 'cert_'
     middleware_attr_schema = 'certificate'
     is_singletone = False
-    complete_job = False
     middleware_job = True
 
     class Meta:
@@ -2877,6 +2876,10 @@ class CertificateCSRImportForm(MiddlewareModelForm, ModelForm):
         widget=forms.PasswordInput(render_value=True),
     )
 
+    def __init__(self, *args, **kwargs):
+        self.complete_job = kwargs.pop('complete_job', False)
+        super(CertificateCSRImportForm, self).__init__(*args, **kwargs)
+
     def clean_cert_passphrase2(self):
         cdata = self.cleaned_data
         passphrase = cdata.get('cert_passphrase')
@@ -2901,7 +2904,6 @@ class CertificateImportForm(MiddlewareModelForm, ModelForm):
     middleware_attr_prefix = 'cert_'
     middleware_attr_schema = 'certificate'
     is_singletone = False
-    complete_job = False
     middleware_job = True
 
     class Meta:
@@ -2965,6 +2967,7 @@ class CertificateImportForm(MiddlewareModelForm, ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
+        self.complete_job = kwargs.pop('complete_job', False)
         super(CertificateImportForm, self).__init__(*args, **kwargs)
 
         self.fields['cert_csr'].widget.attrs['onChange'] = (
@@ -3001,7 +3004,6 @@ class CertificateCreateInternalForm(MiddlewareModelForm, ModelForm):
     middleware_attr_prefix = 'cert_'
     middleware_attr_schema = 'certificate'
     is_singletone = False
-    complete_job = False
     middleware_job = True
 
     cert_name = forms.CharField(
@@ -3066,6 +3068,7 @@ class CertificateCreateInternalForm(MiddlewareModelForm, ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
+        self.complete_job = kwargs.pop('complete_job', False)
         super(CertificateCreateInternalForm, self).__init__(*args, **kwargs)
 
         self.fields['cert_signedby'].required = True
@@ -3112,7 +3115,6 @@ class CertificateCreateCSRForm(MiddlewareModelForm, ModelForm):
     middleware_attr_prefix = 'cert_'
     middleware_attr_schema = 'certificate'
     is_singletone = False
-    complete_job = False
     middleware_job = True
 
     cert_name = forms.CharField(
@@ -3170,6 +3172,10 @@ class CertificateCreateCSRForm(MiddlewareModelForm, ModelForm):
         required=False,
         help_text=models.Certificate._meta.get_field('cert_san').help_text
     )
+
+    def __init__(self, *args, **kwargs):
+        self.complete_job = kwargs.pop('complete_job', False)
+        super(CertificateCreateCSRForm, self).__init__(*args, **kwargs)
 
     def middleware_clean(self, data):
         data['key_length'] = int(data['key_length'])
