@@ -1996,7 +1996,7 @@ def certificate_acme_create(request, csr_id):
     if request.session.get('certificate_create'):
 
         form, job, verrors = certificate_common_post_create(
-            'create', request
+            'create', request, csr_id=csr_id
         )
 
         if job['state'] == 'SUCCESS':
@@ -2021,7 +2021,7 @@ def certificate_acme_create(request, csr_id):
 
             return render(
                 request, 'system/certificate/certificate_progress.html', {
-                    'certificate_url': reverse('certificate_acme_create'),
+                    'certificate_url': reverse('certificate_acme_create', kwargs={'csr_id': csr_id}),
                     'dialog_name': 'Create ACME Certificate'
                 }
             )
@@ -2218,7 +2218,7 @@ def certificate_edit(request, id):
     if request.session.get('certificate_create'):
 
         form, job, verrors = certificate_common_post_create(
-            'update', request, cert
+            'update', request, instance=cert
         )
 
         if job['state'] == 'SUCCESS':
@@ -2263,7 +2263,7 @@ def CSR_edit(request, id):
     if request.session.get('certificate_create'):
 
         form, job, verrors = certificate_common_post_create(
-            'update', request, cert
+            'update', request, instance=cert
         )
 
         if job['state'] == 'SUCCESS':
