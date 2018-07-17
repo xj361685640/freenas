@@ -1557,6 +1557,7 @@ require([
 
     }
 
+
     credentialsProvider = function(provider_id, class_name) {
 
         var provider = registry.byId(provider_id).get('value');

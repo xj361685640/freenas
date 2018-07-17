@@ -419,7 +419,7 @@ class CertificateFAdmin(BaseFreeAdmin):
         return func
 
 
-class DNSAuthenticatorFAdmin(BaseFreeAdmin):
+class ACMEDNSAuthenticatorFAdmin(BaseFreeAdmin):
 
     icon_object = "CertificateIcon"
     icon_model = "CertificateIcon"
@@ -455,6 +455,6 @@ site.register(None, BootStatusFAdmin)
 site.register(models.CertificateAuthority, CertificateAuthorityFAdmin)
 site.register(models.Certificate, CertificateFAdmin)
 site.register(models.CloudCredentials, CloudCredentialsFAdmin)
-site.register(models.DNSAuthenticator, DNSAuthenticatorFAdmin)
+site.register(models.ACMEDNSAuthenticator, ACMEDNSAuthenticatorFAdmin)
 site.register(models.Settings, SettingsFAdmin)
 site.register(models.Update, UpdateFAdmin)

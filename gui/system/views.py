@@ -2003,7 +2003,7 @@ def certificate_acme_create(request, csr_id):
             return JsonResp(request, message=_('ACME Certificate successfully created'))
         else:
             if not verrors:
-                raise ClientException(job['error'], trace=job['exception'])
+                raise MiddlewareError(job['error'])
             else:
                 return render(request, 'system/certificate/certificate_create_ACME.html', {
                     'form': form
@@ -2047,7 +2047,7 @@ def certificate_csr_import(request):
             return JsonResp(request, message=_('Certificate Signing Request successfully Imported'))
         else:
             if not verrors:
-                raise ClientException(job['error'], trace=job['exception'])
+                raise MiddlewareError(job['error'])
             else:
                 return render(request, 'system/certificate/CSR_import.html', {
                     'form': form
@@ -2091,7 +2091,7 @@ def certificate_import(request):
             return JsonResp(request, message=_('Certificate successfully Imported'))
         else:
             if not verrors:
-                raise ClientException(job['error'], trace=job['exception'])
+                raise MiddlewareError(job['error'])
             else:
                 return render(request, 'system/certificate/certificate_import.html', {
                     'form': form
@@ -2135,7 +2135,7 @@ def certificate_create_internal(request):
             return JsonResp(request, message=_('Certificate successfully Created'))
         else:
             if not verrors:
-                raise ClientException(job['error'], trace=job['exception'])
+                raise MiddlewareError(job['error'])
             else:
                 return render(request, 'system/certificate/certificate_create_internal.html', {
                     'form': form
@@ -2179,7 +2179,7 @@ def certificate_create_CSR(request):
             return JsonResp(request, message=_('Certificate Signing Request successfully Created'))
         else:
             if not verrors:
-                raise ClientException(job['error'], trace=job['exception'])
+                raise MiddlewareError(job['error'])
             else:
                 return render(request, 'system/certificate/certificate_create_CSR.html', {
                     'form': form
@@ -2225,7 +2225,7 @@ def certificate_edit(request, id):
             return JsonResp(request, message=_('Certificate successfully edited'))
         else:
             if not verrors:
-                raise ClientException(job['error'], trace=job['exception'])
+                raise MiddlewareError(job['error'])
             else:
                 return render(request, 'system/certificate/certificate_edit.html', {
                     'form': form
@@ -2270,7 +2270,7 @@ def CSR_edit(request, id):
             return JsonResp(request, message=_('CSR successfully edited'))
         else:
             if not verrors:
-                raise ClientException(job['error'], trace=job['exception'])
+                raise MiddlewareError(job['error'])
             else:
                 return render(request, 'system/certificate/CSR_edit.html', {
                     'form': form

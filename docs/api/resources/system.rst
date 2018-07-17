@@ -1092,12 +1092,12 @@ Create ACME Certificate
       Content-Type: application/json
 
         {
-                "cert_tos": True,
+                "cert_tos": true,
                 "csr_id": 1,
                 "cert_name": "acme_cert",
                 "cert_renew_days": 10,
                 "cert_acme_directory_uri": "https://acme-staging-v02.api.letsencrypt.org/directory",
-                "domain_acmedev.agencialivre.com.br": 4
+                "domain_acme.example.ixsystems.com": 4
         }
 
    **Example response**:
@@ -1110,8 +1110,8 @@ Create ACME Certificate
 
         ACME Certificate successfully created.
 
-    NOTE: All the domains which exist in the csr are to be added in the payload. If there's a domain "acmedev.agencialivre.com.br" in csr,
-          how to add this in the payload is "domain_acmedev.agencialivre.com.br". "domain_" prefix is used for this purpose
+    NOTE: All the domains which exist in the csr are to be added in the payload. If there's a domain "acme.example.ixsystems.com" in csr,
+          how to add this in the payload is "domain_acme.example.ixsystems.com". "domain_" prefix is used for this purpose
 
    :json boolean cert_tos: terms of service for the acme server
    :json string cert_name: identifier
@@ -1287,7 +1287,7 @@ The DNS AUTHENTICATOR resource represents DNS authenticators for ACME based DNS 
 List resource
 +++++++++++++
 
-.. http:get:: /api/v1.0/system/dnsauthenticator/
+.. http:get:: /api/v1.0/system/acmednsauthenticator/
 
    Returns a list of DNS Authenticators.
 
@@ -1295,7 +1295,7 @@ List resource
 
    .. sourcecode:: http
 
-      GET /api/v1.0/system/dnsauthenticator/ HTTP/1.1
+      GET /api/v1.0/system/acmednsauthenticator/ HTTP/1.1
       Content-Type: application/json
 
    **Example response**:
@@ -1308,7 +1308,11 @@ List resource
 
       [
         {
-
+            'attributes': "{'secret_access_key': '6qBNN', "
+                "'access_key_id': 'Z8Exkg=='}",
+            'authenticator': 'route53',
+            'id': 1,
+            'name': 'acme_route53'
         }
       ]
 
@@ -1321,7 +1325,7 @@ List resource
 Delete resource
 +++++++++++++++
 
-.. http:delete:: /api/v1.0/system/dnsauthenticator/(int:id)/
+.. http:delete:: /api/v1.0/system/acmednsauthenticator/(int:id)/
 
    Delete Authenticator `id`.
 
@@ -1329,7 +1333,7 @@ Delete resource
 
    .. sourcecode:: http
 
-      DELETE /api/v1.0/system/dnsauthenticator/1/ HTTP/1.1
+      DELETE /api/v1.0/system/acmednsauthenticator/1/ HTTP/1.1
       Content-Type: application/json
 
    **Example response**:
