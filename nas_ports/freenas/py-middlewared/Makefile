@@ -33,6 +33,12 @@ RUN_DEPENDS=	${PYTHON_PKGNAMEPREFIX}ws4py>0:www/py-ws4py@${FLAVOR} \
 		${PYTHON_PKGNAMEPREFIX}asyncssh>0:security/py-asyncssh@${FLAVOR} \
 		${PYTHON_PKGNAMEPREFIX}croniter>0:sysutils/py-croniter@${FLAVOR} \
 		${PYTHON_PKGNAMEPREFIX}bidict>0:devel/py-bidict@${FLAVOR} \
+		${PYTHON_PKGNAMEPREFIX}acme>0:security/py-acme@${FLAVOR} \
+		${PYTHON_PKGNAMEPREFIX}josepy>0:security/py-josepy@${FLAVOR} \
+		${PYTHON_PKGNAMEPREFIX}certbot-dns-cloudfare>0:security/py-certbot-dns-cloudfare@${FLAVOR} \
+		${PYTHON_PKGNAMEPREFIX}certbot-dns-digitalocean>0:security/py-certbot-dns-digitalocean@${FLAVOR} \
+		${PYTHON_PKGNAMEPREFIX}certbot-dns-google>0:security/py-certbot-dns-google@${FLAVOR} \
+		${PYTHON_PKGNAMEPREFIX}certbot-dns-ovh>0:security/py-certbot-dns-ovh@${FLAVOR} \
 		rclone>0:net/rclone \
 		swagger-ui>0:freenas/swagger-ui
 
