@@ -1279,10 +1279,10 @@ Delete resource
    :statuscode 204: no error
 
 
-DNS AUTHENTICATOR
+ACME DNS AUTHENTICATOR
 -----------------
 
-The DNS AUTHENTICATOR resource represents DNS authenticators for ACME based DNS challenges.
+The ACME DNS AUTHENTICATOR resource represents DNS authenticators for ACME based DNS challenges.
 
 List resource
 +++++++++++++
