@@ -682,8 +682,18 @@ class mDNSServiceThread(threading.Thread):
         sdRef.close()
 
     def register(self):
-        if self.hostname and self.regtype and self.port:
-            self._register(self.hostname, self.regtype, self.port)
+        reg_name = self.hostname
+        '''
+        Special handling for HA systems. Only register the virtual hostname on the active storage controller.
+        '''
+        if not self.middleware.call_sync('notifier.is_freenas') and self.middleware.call_sync('notifier.failover_licensed'):
+            if self.middleware.call_sync('notifier.failover_status') == 'MASTER':
+                reg_name = self.middleware.call_sync('datastore.query', 'network.globalconfiguration', None, {'get' : True})['gc_hostname_virtual']
+            else:
+                reg_name = None
+
+        if reg_name and self.regtype and self.port:
+            self._register(reg_name, self.regtype, self.port)
 
     def run(self):
         try:

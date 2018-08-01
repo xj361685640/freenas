@@ -50,7 +50,7 @@ from freenasUI.common.freenassysctl import freenas_sysctl as fs
 
 log = logging.getLogger('generate_smb4_conf')
 
-is_truenas_ha = False
+truenas_conf = {'is_truenas_ha':False, 'smb_ha_type':0, 'failover_status':'DEFAULT'}
 
 
 def qw(w):
@@ -364,7 +364,11 @@ def get_dcerpc_endpoint_servers():
 
 
 def get_server_role(client):
+    global truenas_conf
     role = "standalone"
+    if truenas_conf['smb_ha_type'] == 1 and not truenas_conf['failover_status'] == 'MASTER':
+        return role
+
     if client.call('notifier.common', 'system', 'activedirectory_enabled') or smb4_ldap_enabled(client):
         role = "member"
 
@@ -929,7 +933,7 @@ def generate_smb4_tdb(client, smb4_tdb):
 
 
 def generate_smb4_conf(client, smb4_conf, role):
-    global is_truenas_ha
+    global truenas_conf
 
     cifs = Struct(client.call('smb.config'))
 
@@ -1003,8 +1007,11 @@ def generate_smb4_conf(client, smb4_conf, role):
     confset1(smb4_conf, "deadtime = 15")
     confset1(smb4_conf, "max log size = 51200")
 
-    if is_truenas_ha:
-        confset1(smb4_conf, "private dir = /root/samba/private")
+    if truenas_conf['is_truenas_ha']:
+        if truenas_conf['smb_ha_type'] == 0:
+            confset1(smb4_conf, "private dir = /root/samba/private")
+        else:
+            confset1(smb4_conf, "private dir = /var/db/samba4/private")
 
     confset2(smb4_conf, "max open files = %d",
              int(get_sysctl('kern.maxfilesperproc')) - 25)
@@ -1021,7 +1028,7 @@ def generate_smb4_conf(client, smb4_conf, role):
     else:
         confset1(smb4_conf, "logging = file")
 
-    if is_truenas_ha:
+    if truenas_conf['is_truenas_ha']:
         confset1(smb4_conf, "winbind netbios alias spn = false")
 
     confset1(smb4_conf, "load printers = no")
@@ -1101,7 +1108,10 @@ def generate_smb4_conf(client, smb4_conf, role):
 
     elif role == 'standalone':
         confset1(smb4_conf, "server role = standalone")
-        confset2(smb4_conf, "netbios name = %s", cifs.netbiosname.upper())
+        if truenas_conf['smb_ha_type'] == 1 and not truenas_conf['failover_status'] == 'MASTER':
+            confset2(smb4_conf, "netbios name = %s-STANDBY", cifs.netbiosname.upper())
+        else:
+            confset2(smb4_conf, "netbios name = %s", cifs.netbiosname.upper())
         if cifs.netbiosalias:
             confset2(smb4_conf, "netbios aliases = %s", cifs.netbiosalias.upper())
         confset2(smb4_conf, "workgroup = %s", cifs.workgroup.upper())
@@ -1317,12 +1327,15 @@ def smb4_unlink(dir):
 
 
 def smb4_setup(client):
-    global is_truenas_ha
+    global truenas_conf
     statedir = "/var/db/samba4"
     privatedir = "/var/db/samba4/private"
 
-    if is_truenas_ha:
-        privatedir = "/root/samba/private"
+    if truenas_conf['is_truenas_ha']:
+        if truenas_conf['smb_ha_type'] == 1:
+            privatedir = "/var/db/samba4/private"
+        else:
+            privatedir = "/root/samba/private"
 
     if not os.access(privatedir, os.F_OK):
         smb4_mkdir(privatedir)
@@ -1337,7 +1350,7 @@ def smb4_setup(client):
     smb4_unlink("/usr/local/etc/smb.conf")
     smb4_unlink("/usr/local/etc/smb4.conf")
 
-    if not client.call('notifier.is_freenas') and client.call('notifier.failover_status') == 'BACKUP':
+    if truenas_conf['is_truenas_ha'] and truenas_conf['failover_status'] == 'BACKUP':
         return
 
     systemdataset = client.call('systemdataset.config')
@@ -1665,7 +1678,7 @@ def smb4_do_migrations(client):
 
 
 def main():
-    global is_truenas_ha
+    global truenas_conf 
 
     smb4_tdb = []
     smb4_conf = []
@@ -1676,10 +1689,14 @@ def main():
     client = Client()
 
     if not client.call('notifier.is_freenas') and client.call('notifier.failover_licensed'):
-        is_truenas_ha = True
+        truenas_conf['is_truenas_ha'] = True
+        truenas_conf['failover_status'] = client.call('notifier.failover_status')
+        cifs = Struct(client.call('datastore.query', 'services.cifs', None, {'get': True}))
+        if cifs.cifs_srv_netbiosname == cifs.cifs_srv_netbiosname_b:
+            truenas_conf['smb_ha_type'] = 1
 
     privatedir = "/var/db/samba4/private"
-    if is_truenas_ha:
+    if truenas_conf['is_truenas_ha'] and not truenas_conf['smb_ha_type'] == 1:
         privatedir = "/root/samba/private"
 
     smb4_setup(client)
