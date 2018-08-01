@@ -50,7 +50,7 @@ from freenasUI.common.freenassysctl import freenas_sysctl as fs
 
 log = logging.getLogger('generate_smb4_conf')
 
-truenas_conf = {'is_truenas_ha':False, 'smb_ha_type':0, 'failover_status':'DEFAULT'}
+truenas_conf = {'is_truenas_ha': False, 'smb_ha_type': 0, 'failover_status': 'DEFAULT'}
 
 
 def qw(w):
@@ -1678,7 +1678,7 @@ def smb4_do_migrations(client):
 
 
 def main():
-    global truenas_conf 
+    global truenas_conf
 
     smb4_tdb = []
     smb4_conf = []
