@@ -79,7 +79,6 @@ adctl_start()
 
 	if ! AD_init
 	then
-		activedirectory_set 0
 		return 1
 	fi
 
@@ -108,7 +107,6 @@ adctl_start()
 	adctl_cmd ${service} ix-kinit quietstart
 	if ! adctl_cmd ${service} ix-kinit status
 	then
-		activedirectory_set 0
 		return 1
 	fi
 
@@ -127,12 +125,10 @@ adctl_start()
 
 	if ! adctl_cmd ${service} ix-activedirectory quietstart
 	then
-		activedirectory_set 0
 		return 1
 	fi
 	if ! adctl_cmd ${service} ix-activedirectory status
 	then
-		activedirectory_set 0
 		return 1
 	fi
 
