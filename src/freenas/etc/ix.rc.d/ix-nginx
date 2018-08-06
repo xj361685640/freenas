@@ -319,7 +319,7 @@ __EOF__
         }
 
         location /api/docs {
-            proxy_pass https://127.0.0.1:6000/api/docs;
+            proxy_pass http://127.0.0.1:6000/api/docs;
             proxy_set_header Host \$host;
             proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
             proxy_set_header X-Scheme \$scheme;
@@ -369,7 +369,7 @@ __EOF__
         }
 
         location /websocket {
-            proxy_pass https://127.0.0.1:6000/websocket;
+            proxy_pass http://127.0.0.1:6000/websocket;
             proxy_http_version 1.1;
             proxy_set_header X-Real-Remote-Addr \$remote_addr;
             proxy_set_header X-Real-Remote-Port \$remote_port;
@@ -378,7 +378,7 @@ __EOF__
         }
 
         location /websocket/shell {
-            proxy_pass https://127.0.0.1:6000/_shell;
+            proxy_pass http://127.0.0.1:6000/_shell;
             proxy_http_version 1.1;
             proxy_set_header X-Real-Remote-Addr \$remote_addr;
             proxy_set_header X-Real-Remote-Port \$remote_port;
@@ -392,7 +392,7 @@ __EOF__
 	    # do not add the path to proxy_pass because of automatic url decoding
 	    # e.g. /api/v2.0/pool/dataset/id/tank%2Ffoo/ would become
 	    #      /api/v2.0/pool/dataset/id/tank/foo/
-            proxy_pass https://127.0.0.1:6000;
+            proxy_pass http://127.0.0.1:6000;
             proxy_http_version 1.1;
             proxy_set_header X-Real-Remote-Addr \$remote_addr;
             proxy_set_header X-Real-Remote-Port \$remote_port;
@@ -401,7 +401,7 @@ __EOF__
         }
 
         location /_download {
-            proxy_pass https://127.0.0.1:6000;
+            proxy_pass http://127.0.0.1:6000;
             proxy_http_version 1.1;
             proxy_set_header X-Real-Remote-Addr \$remote_addr;
             proxy_set_header X-Real-Remote-Port \$remote_port;
@@ -410,7 +410,7 @@ __EOF__
         location /_upload {
             # Allow uploads of any size. Its middlewared job to handle size.
             client_max_body_size 0;
-            proxy_pass https://127.0.0.1:6000;
+            proxy_pass http://127.0.0.1:6000;
             # make sure nginx does not buffer the upload and pass directly to middlewared
             proxy_request_buffering off;
             proxy_http_version 1.1;
