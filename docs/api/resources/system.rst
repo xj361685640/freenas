@@ -672,7 +672,6 @@ List resource
                 "stg_guiport": 80,
                 "stg_guihttpsport": 443,
                 "stg_guihttpsredirect": true,
-                "stg_guiprotocol": "http",
                 "stg_guiv6address": "::",
                 "stg_syslogserver": "",
                 "stg_language": "en",
@@ -717,7 +716,6 @@ Update resource
                 "stg_guiport": 80,
                 "stg_guihttpsport": 443,
                 "stg_guihttpsredirect": true,
-                "stg_guiprotocol": "http",
                 "stg_guiv6address": "::",
                 "stg_syslogserver": "",
                 "stg_language": "en",
@@ -728,7 +726,6 @@ Update resource
                 "id": 1
         }
 
-   :json string stg_guiprotocol: http, https
    :json integer stg_guicertificate: Certificate ID
    :json string stg_guiaddress: WebGUI IPv4 Address
    :json string stg_guiv6address: WebGUI IPv6 Address
