@@ -1696,18 +1696,12 @@ def main():
 
     generate_smbusers(client)
     generate_smb4_tdb(client, smb4_tdb)
-    generate_smb4_conf(client, smb4_conf, role)
-    generate_smb4_system_shares(client, smb4_shares)
-    generate_smb4_shares(client, smb4_shares)
 
     if role == 'dc' and not client.call('notifier.samba4', 'domain_provisioned'):
         provision_smb4(client)
 
-    with open(smb_conf_path, "w") as f:
-        for line in smb4_conf:
-            f.write(line + '\n')
-        for line in smb4_shares:
-            f.write(line + '\n')
+    client.call('etc.generate', 'smb')
+    client.call('etc.generate', 'smb_share')
 
     smb4_set_SID(client, role)
 
