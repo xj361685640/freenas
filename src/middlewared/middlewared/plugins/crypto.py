@@ -1287,7 +1287,7 @@ class CertificateAuthorityService(CRUDService):
         Int('id')
     )
     async def do_delete(self, id):
-        ca = self._get_instance(id)
+        ca = await self._get_instance(id)
 
         response = await self.middleware.call(
             'datastore.delete',
